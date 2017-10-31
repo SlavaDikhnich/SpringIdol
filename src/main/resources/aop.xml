@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop" xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <aop:aspectj-autoproxy/>
+
+    <bean id="audience" class="org.springInAction.springIdol.stages.Audience"/>
+    <bean id="magicMan" class="org.springInAction.springIdol.thinker.MagicMan"/>
+    <bean id="volunteer" class="org.springInAction.springIdol.thinker.Volunteer"/>
+    <bean id="magicManAnnotation" class="org.springInAction.springIdol.thinker.MagicManAnnotation"/>
+    <bean id="contestantAnnotation" class="org.springInAction.springIdol.thinker.ContestantIntroducerAnnotation"/>
+
+    <aop:config>
+        <!--<aop:aspect ref="audience">             &lt;!&ndash; Ссылка на компонент audience &ndash;&gt;-->
+            <!--<aop:pointcut id="performance"-->
+                          <!--expression="execution(* org.springInAction.springIdol.abstractive.Performer.perform(..))"/>-->
+
+            <!--<aop:pointcut id="performance2"-->
+                          <!--expression="execution(* org.springInAction.springIdol.abstractive.Performer.perform(..))"/>-->
+
+            <!--<aop:before pointcut-ref="performance" method="takeSeats"/>      &lt;!&ndash; Перед выступлением &ndash;&gt;-->
+
+            <!--<aop:before pointcut-ref="performance" method="turnOffCellPhones"/>  &lt;!&ndash; Перед выступлением &ndash;&gt;-->
+
+            <!--<aop:after-returning pointcut-ref="performance" method="applaud"/>         &lt;!&ndash; После выступления &ndash;&gt;-->
+
+            <!--<aop:after-throwing pointcut-ref="performance" method="demandRefund"/>    &lt;!&ndash; После неудачного выступления &ndash;&gt;-->
+
+            <!--&lt;!&ndash; Совет выполняемый до и после &ndash;&gt;-->
+
+            <!--<aop:around pointcut-ref="performance2" method="watchPerformance"/>-->
+
+        <!--</aop:aspect>-->
+
+                            <!-- Передача совету параметров. Классы MagicMan, Volunteer  -->
+        <aop:aspect ref="magicMan">
+            <aop:pointcut id="thinking"
+                          expression="execution(* org.springInAction.springIdol.thinker.Thinker.thinkOfSomething(String))
+                          and args(thoughts)"/>
+            <aop:before pointcut-ref="thinking"
+                        method="interceptThoughts"
+                        arg-names="thoughts"/>
+        </aop:aspect>
+
+        <!-- Добавление интерфейса и его реализации в компоненты -->
+
+        <!--<aop:aspect>-->
+            <!--<aop:declare-parents types-matching="org.springInAction.springIdol.abstractive.Performer+"-->
+                                 <!--implement-interface="org.springInAction.springIdol.thinker.Contestant"-->
+                                 <!--default-impl="org.springInAction.springIdol.thinker.GraciousContestant"-->
+            <!--/>-->
+        <!--</aop:aspect>-->
+
+
+    </aop:config>
+</beans>

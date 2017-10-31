@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- Подстановка метода  -->
+
+    <bean id="harry" class="org.springInAction.springIdol.magicans.Magician">
+        <property name="magicBox" ref="magicBox" />
+        <property name="magicWords" value="Bippity boppity boo" />
+    </bean>
+
+    <bean id="magicBox" class="org.springInAction.springIdol.magicans.MagicBoxImpl">
+        <replaced-method name="getContents" replacer="tigerReplacer" />
+    </bean>
+
+    <bean id="tigerReplacer" class="org.springInAction.springIdol.magicans.TigerReplacer" />
+
+    <bean id="klark" class="org.springInAction.springIdol.musicians.NewInstrumentalist">
+        <lookup-method name="getInstrument" bean="guitar" />
+        <property name="song" value="Greenleeves" />
+    </bean>
+
+    <!-- Наследование  -->
+
+    <bean id="baseSaxophonist" class="org.springInAction.springIdol.musicians.Instrumentalist"
+          abstract="true">
+        <property name="instrument" ref="piano" />
+        <property name="song" value="Jingle Bells" />
+    </bean>
+
+    <bean id="david" parent="baseSaxophonist"/>
+
+    <bean id="frank" parent="baseSaxophonist">
+        <property name="song" value="Mary had a little lamb" />
+    </bean>
+
+    <bean id="basePerformer" abstract="true">
+        <property name="song" value="Sometimes Over the Rainbow" />
+    </bean>
+
+    <bean id="taylor" class="org.springInAction.springIdol.musicians.Vocalist"
+          parent="basePerformer"/>
+
+    <bean id="stevie" class="org.springInAction.springIdol.musicians.Instrumentalist"
+          parent="basePerformer">
+        <property name="instrument" ref="piano" />
+    </bean>
+
+    <bean id="kenny" class="org.springInAction.springIdol.musicians.Instrumentalist">
+        <property name="song" value="Jingle Bellllrllrllrlrllrlllls" />
+        <property name="instrument" ref="piano" />
+    </bean>
+
+    <!-- пример spel  -->
+
+    <!--<bean id="carl" class="org.springInAction.springIdol.musicians.Instrumentalist">-->
+        <!--<property name="song" value="#{kenny.song != null ? kenny.song : 'Greensleeves'}" />-->
+        <!--<property name="instrument" ref="saxophone1" />-->
+    <!--</bean>-->
+
+    <bean id="kennySax" class="org.springInAction.springIdol.musicians.Instrumentalist">
+        <property name="song" value="Jingle Bells" />
+        <property name="instrument">
+            <bean id="saxophone" class="org.springInAction.springIdol.instruments.Saxophone" />
+        </property>
+    </bean>
+
+    <bean id="hankList" class="org.springInAction.springIdol.musicians.OneManBand">
+        <property name="instruments">
+            <list>
+                <ref bean="piano" />
+                <ref bean="saxophone1" />
+            </list>
+        </property>
+    </bean>
+
+    <bean id="auditorium" class="org.springInAction.springIdol.stages.Auditorium"
+          init-method="turnOnLights" destroy-method="turnOffLights" />
+
+    <bean id="poeticDuke" class="org.springInAction.springIdol.actors.PoeticJuggler">
+        <constructor-arg value="15" />
+        <constructor-arg>
+            <bean id="sonnet" class="org.springInAction.springIdol.actors.Sonnet29"/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="ticket" class="org.springInAction.springIdol.stages.Ticket"
+          scope="prototype" />
+
+    <bean id="duke" class="org.springInAction.springIdol.actors.Juggler">
+        <constructor-arg value="15"/>
+    </bean>
+
+    <bean id="theStage" class="org.springInAction.springIdol.stages.Stage"
+          factory-method="getInstance" />
+
+</beans>
